@@ -50,6 +50,23 @@ def login():
             flash('Username or Password is incorrect.', 'danger')
     flash_errors(form)
     return render_template("login.html", form=form)
+
+@app.route("/secure_page", methods=["GET"])
+@login_required
+def secure_page():
+    if not current_user.is_authenticated:
+        return redirect(url_for("login"))
+    return render_template('secure_page.html')
+
+
+    
+@app.route("/logout")
+@login_required
+def logout():
+    logout_user()
+    flash('You have been logged out.', 'danger')
+    return redirect(url_for('home'))    
+    
     
 def flash_errors(form):
     for field, errors in form.errors.items():
